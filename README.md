@@ -1,5 +1,5 @@
-﻿# Multilingual RDF verbalizer - GSoC/2019
-### Author - [Dwaraknath Gnaneshwar](https://github.com/DwaraknathT)
+﻿# NABU - Multilingual RDF verbalizer
+### [Dwaraknath Gnaneshwar](https://github.com/DwaraknathT), Diego Moussallem, Thiago Castro Ferriera and Axel-Cyrille Ngonga Ngomo 
 
 ## Abstract :
 
@@ -9,7 +9,7 @@ An RDF triple set contains a triple set, each of the form **< subject | predicat
 
 A high-level overview of the dataflow would be like this :
 
-![Image](https://raw.githubusercontent.com/DwaraknathT/GSoC-19/final/assets/rdf2nl.png)
+![Image](https://raw.githubusercontent.com/DwaraknathT/NABU/assets/rdf2nl.png)
 [Picture courtesy](https://blog.dbpedia.org/2019/08/08/rdf2nl-generating-texts-from-rdf-data)
 
 
@@ -134,7 +134,7 @@ python train_multiple.py \
 - To run the multilingual model replace train_single.py with train_multiple.py. All languages must be preprocessed to train the multilingual model. The multilingual model preprocesses the data for all languages automatically, no need to change the train_path, eval_path, test_path. the lang, eval and eval_ref parameters must be changed to 'mutli' to save it's checkpoints in a folder of the same name.
 
 ## Credits :
-- My idea is an extension and a variation of the paper [Deep Graph Convolutional Encoders for
+- Our idea is an extension and a variation of the paper [Deep Graph Convolutional Encoders for
 Structured Data to Text Generation](https://arxiv.org/pdf/1810.09995.pdf) , my input pipeline follows the same principle but is a different implementation as comapred to the [paper's.](https://github.com/diegma/graph-2-text)
 
-- My implementation of Transformers is based on the official [Tensorflow's implementation.](https://github.com/tensorflow/models/tree/master/official/transformer) 
+- Our implementation of Transformers is based on the official [Tensorflow's implementation.](https://github.com/tensorflow/models/tree/master/official/transformer) 
