@@ -6,77 +6,14 @@ from __future__ import print_function
 
 import tensorflow as tf
 
+from src.layers import AttentionLayer
 from src.layers import EmbeddingLayer
-from src.layers.Decoders import RNNDecoder
-from src.layers.Encoders import GraphEncoder
-from src.models.Transformer import DecoderStack
 from src.layers import ffn_layer
+from src.models.Transformer import DecoderStack
 from src.models.Transformer import PrePostProcessingWrapper, LayerNormalization
 from src.utils import TransformerUtils
-from src.layers import AttentionLayer
-from src.layers.GATLayer import GraphAttentionLayer
 from src.utils import beam_search
 from src.utils.metrics import MetricLayer
-from src.utils.model_utils import loss_function
-
-
-class GATModel(tf.keras.Model):
-  """
-  Model that uses Graph Attention encoder and RNN decoder (for now)
-  """
-
-  def __init__(self, args, src_vocab_size, tgt_vocab_size, target_lang):
-    super(GATModel, self).__init__()
-    self.emb_layer = EmbeddingLayer.EmbeddingSharedWeights(
-      src_vocab_size, args.emb_dim)
-
-    self.tgt_emb_layer = EmbeddingLayer.EmbeddingSharedWeights(
-      tgt_vocab_size, args.emb_dim)
-
-    self.encoder = GraphEncoder(args.enc_layers, args.emb_dim, args.num_heads, args.hidden_size,
-                                args.filter_size, reg_scale=args.reg_scale, rate=args.dropout)
-    self.decoder = RNNDecoder(tgt_vocab_size, args.emb_dim, args.enc_units, args.batch_size)
-    self.vocab_tgt_size = tgt_vocab_size
-    self.num_heads = args.num_heads
-    self.target_lang = target_lang
-    self.loss_object = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True, reduction='none')
-    self.hidden = tf.keras.layers.Dense(args.hidden_size)
-
-  def __call__(self, nodes, labels, node1, node2, targ):
-    """
-    Puts the tensors through encoders and decoders
-    :param adj: Adjacency matrices of input example
-    :type adj: tf.tensor
-    :param nodes: node features
-    :type nodes: tf.tensor
-    :param targ: target sequences
-    :type targ: tf.tensor
-    :return: output probability distribution
-    :rtype: tf.tensor
-    """
-    node_tensor = tf.cast(self.emb_layer(nodes), dtype=tf.flaot32)
-    label_tensor = tf.cast(self.emb_layer(labels), dtype=tf.float32)
-    node1_tensor = tf.cast(self.emb_layer(node1), dtype=tf.float32)
-    node2_tensor = tf.cast(self.emb_layer(node2), dtype=tf.float32)
-
-    enc_output = self.encoder(node_tensor, label_tensor, node1_tensor, node2_tensor,
-                              self.num_heads, self.encoder.trainable)
-    batch = enc_output.shape[0]
-    self.enc_output_hidden = tf.reshape(enc_output, shape=[batch, -1])
-    enc_hidden = self.hidden(self.enc_output_hidden)
-
-    dec_input = tf.expand_dims([self.target_lang.word_index['<start>']] * self.args.batch_size, 1)
-    loss = 0
-
-    for t in range(1, targ.shape[1]):
-      # pass encoder output to decoder
-      predictions, dec_hidden, _ = self.decoder(dec_input, enc_hidden, enc_output)
-      loss += loss_function(targ[:, t], predictions, self.loss_object)
-
-      # using teacher forcing
-      dec_input = tf.expand_dims(targ[:, t], 1)
-
-    return predictions, dec_hidden, loss
 
 
 class EncoderStack(tf.keras.layers.Layer):
@@ -298,9 +235,5 @@ class TransGAT(tf.keras.Model):
 
     logits = self.tgt_emb_layer(outputs, mode="linear")
     logits = tf.cast(logits, tf.float32)
-    # increase the temperature of the logits before
-    # turning them into probability distribution
-    if self.args.distillation == 'True':
-      logits = tf.math.divide(logits, self.temp)
 
     return logits

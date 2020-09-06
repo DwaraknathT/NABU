@@ -7,8 +7,8 @@ import sentencepiece as spm
 import tensorflow as tf
 
 from src.utils.PreprocessingUtils import PreProcess
-from src.utils.model_utils import PreprocessSeqSource
 from src.utils.model_utils import PreProcessSentence, _tensorize, Padding as padding
+from src.utils.model_utils import PreprocessSeqSource
 
 languages = ['eng', 'ger', 'rus']
 
