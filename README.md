@@ -1,4 +1,4 @@
-﻿# NABU - Multilingual RDF verbalizer
+# NABU - Multilingual RDF verbalizer
 ### [Dwaraknath Gnaneshwar](https://github.com/DwaraknathT), Diego Moussallem, Thiago Castro Ferriera and Axel-Cyrille Ngonga Ngomo 
 
 ## Abstract :
@@ -9,7 +9,7 @@ An RDF triple set contains a triple set, each of the form **< subject | predicat
 
 A high-level overview of the dataflow would be like this :
 
-![Image](https://raw.githubusercontent.com/DwaraknathT/NABU/assets/rdf2nl.png)
+![Image](assets/rdf2nl.png)
 [Picture courtesy](https://blog.dbpedia.org/2019/08/08/rdf2nl-generating-texts-from-rdf-data)
 
 
@@ -24,7 +24,7 @@ The model must be capable of doing the same in multiple languages, hence the nam
 We use attention based encoder-decoder architecture with **Graph Attention Networks** encoder and **Transformer** decoder along with Pure-RNN model and Pure-Transformer model.
 
 The architecture of our model takes the following form.
-![Architecture](https://raw.githubusercontent.com/DwaraknathT/GSoC-19/final/assets/architecture.jpg)
+![Architecture](assets/architecture.jpg)
 [Picture courtesy](https://arxiv.org/pdf/1804.00823.pdf)
 
 The dataset in use is [**WebNLG** challenge's](http://webnlg.loria.fr/pages/challenge.html) dataset.
@@ -76,7 +76,7 @@ python train_multiple.py \
   --model multi --vocab_size 16000 --emb_dim 16 --hidden_size 16 \
   --filter_size 16 --beam_size 5 --sentencepiece_model 'bpe' --beam_alpha 0.1 \
   --enc_layers 1 --dec_layers 1 --num_heads 1 --sentencepiece True --steps 10000 \
-  --eval_steps 1000 --checkpoint 1000 --alpha 0.2 --dropout 0.2 --distillation False \
+  --eval_steps 1000 --checkpoint 1000 --alpha 0.2 --dropout 0.2 \
   --reg_scale 0.0 --decay True --decay_steps 5000 --lang multi --debug_mode False \
   --eval 'data/processed_data/eng/eval_src' --eval_ref 'data/processed_data/eng/eval_tgt'
 
