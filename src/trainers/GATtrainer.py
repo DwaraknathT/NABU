@@ -17,6 +17,7 @@ from src.models.GraphAttentionModel import TransGAT
 from src.utils.metrics import LossLayer
 from src.utils.model_utils import CustomSchedule, _set_up_dirs
 from src.utils.rogue import rouge_n
+from src.utils.model_utils import process_results
 
 
 def _train_gat_trans(args):
@@ -163,6 +164,7 @@ def _train_gat_trans(args):
     score = 0
     eval_results.close()
     model.trainable = True
+    process_results(TestResults)
 
     return rogue, score
 

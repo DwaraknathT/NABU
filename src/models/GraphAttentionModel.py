@@ -96,11 +96,6 @@ class TransGAT(tf.keras.Model):
     self.args = args
     self.num_heads = args.num_heads
     self.max_len = max_seq_len
-    if self.args.distillation == 'True':
-      self.temp = tf.constant(self.args.temp
-                              , dtype=tf.float32)
-    else:
-      self.temp = tf.constant(1, dtype=tf.float32)
 
   def _get_symbols_to_logits_fn(self, max_decode_length, training):
     """Returns a decoding function that calculates logits of the next tokens."""

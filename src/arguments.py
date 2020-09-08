@@ -19,7 +19,7 @@ parser.add_argument(
   '--opt', type=str, required=False, help='The mode in which GAT model is operated -> \
                                              Use Roles method or Reification (roles, reif)')
 parser.add_argument(
-  '--mode', type='train', required=True, help='In training mode or test mode')
+  '--mode', type=str, default='train', required=True, help='In training mode or test mode')
 
 # Colab options
 parser.add_argument(
